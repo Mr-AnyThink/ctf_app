@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded">
+        <div class="card-body p-4">
+            <h2 class="mb-4 text-center text-light">Create New Challenge</h2>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+		<table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <td class="text-light">{{ form.title.label() }}</td>
+                            <td>{{ form.title(class="form-control", style="width: 300%; max-width: 1000px;", placeholder="Challenge Title") }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-light">{{ form.description.label() }}</td>
+                            <td>{{ form.description(class="form-control", style="width: 300%; max-width: 1000px;", rows="4", placeholder="Challenge Description") }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-light">{{ form.category.label() }}</td>
+                            <td>{{ form.category(class="form-control", style="width: 300%; max-width: 1000px;", placeholder="e.g., Web, Crypto, Forensics") }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-light">{{ form.hint.label() }}</td>
+                            <td>{{ form.hint(class="form-control", style="width: 300%; max-width: 1000px;", rows="2", placeholder="Optional Hint") }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-light">{{ form.answer_info.label() }}</td>
+                            <td>{{ form.answer_info(class="form-control", style="width: 300%; max-width: 1000px;", rows="2", placeholder="Additional Information About the Answer") }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-light">{{ form.flag.label() }}</td>
+                            <td>{{ form.flag(class="form-control", style="width: 300%; max-width: 1000px;", placeholder="Correct Flag") }}</td>
+                        </tr>
+                        <tr>
+			    <td/>
+                            <td colspan="2" class="text-center">
+			 	<br/>
+                                <button type="submit" class="btn btn-success w-100">{{ form.submit.label.text }}</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 40vh; width: 60%; padding: 40px; max-width: 600px;">
+    <div class="col-md-4">
+        <div class="card shadow-lg border-0 rounded" style="background-color: #2a2d34;">
+            <div class="card-body p-4">
+                <h2 class="mb-4 text-center text-light">Register</h2>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label text-light") }}
+                        {{ form.username(class="form-control", style="background-color: #1f2228; color: #ffffff;", placeholder="Choose your username") }}
+                    </div>
+                    <br/>
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label text-light") }}
+                        {{ form.password(class="form-control", style="background-color: #1f2228; color: #ffffff;", placeholder="Choose your password") }}
+                    </div>
+                    <br/>
+                    <button type="submit" class="btn btn-primary w-100" style="background-color: #6a5acd; border-color: #5b4ecf;">{{ form.submit.label.text }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional: Add some custom CSS styles -->
+<style>
+    body {
+        background-color: #1f2228; /* Dark background for the entire body */
+    }
+    .btn-primary {
+        transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
+    }
+    .btn-primary:hover {
+        background-color: #5b4ecf; /* Darker shade on hover */
+        border-color: #5b4ecf; /* Change border color on hover */
+    }
+    .form-control {
+        border-radius: 25px; /* Rounded corners for input fields */
+    }
+</style>
+{% endblock %}

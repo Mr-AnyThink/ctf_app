@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Challenge: {{ challenge.title }}</h2>
+    <p class="lead">{{ challenge.description }}</p>
+
+    {% if submission %}
+    <div class="alert alert-success" role="alert">
+        <strong>✅ Solved!</strong> You have solved this challenge.
+    </div>
+    <hr class="my-4">
+    <button class="btn btn-info" onclick="toggleMoreInfo()">More Info</button>
+    <div id="moreInfo" class="mt-3" style="display: none;">
+        <p><strong>More Info:</strong> {{ challenge.answer_info }}</p>
+    </div>
+    {% else %}
+    <form method="POST" action="{{ url_for('submit_flag', challenge_id=challenge.id) }}" class="mt-3">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+	    <br/>
+            {{ form.flag.label(class="form-label") }}
+            {{ form.flag(class="form-control", placeholder="Enter the flag") }}
+	    <br/>
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-signup">{{ form.submit.label.text }}</button>
+    </form>
+
+    {% if challenge.hint %}
+    <hr class="my-4">
+    <button class="btn btn-secondary" onclick="toggleHint()">Show Hint</button>
+    <div id="hint" class="mt-3" style="display: none;">
+       	<p><strong>Hint:</strong> {{ challenge.hint }}</p>
+    </div>
+    {% endif %}
+    {% endif %}
+    <!-- Go Back to Index Button -->
+    <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('index') }}'">Back To Challenges</button>
+</div>
+
+<script>
+    function toggleHint() {
+        var hintDiv = document.getElementById('hint');
+        hintDiv.style.display = (hintDiv.style.display === 'none' || hintDiv.style.display === '') ? 'block' : 'none';
+    }
+
+    function toggleMoreInfo() {
+        var moreInfoDiv = document.getElementById('moreInfo');
+        moreInfoDiv.style.display = (moreInfoDiv.style.display === 'none' || moreInfoDiv.style.display === '') ? 'block' : 'none';
+    }
+</script>
+
+{% endblock %}

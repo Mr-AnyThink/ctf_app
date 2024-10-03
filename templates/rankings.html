@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Participant Rankings</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Username</th>
+            <th>Score</th>
+            <th>Last Solved Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user, score, last_solved_time in rankings %}
+        <tr>
+            <td>{{ loop.index }}</td> <!-- Rank based on the loop index -->
+            <td>{{ user }}</td>
+            <td>{{ score }}</td>
+            <td>{{ last_solved_time.strftime('%Y-%m-%d %H:%M:%S') if last_solved_time else 'N/A' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

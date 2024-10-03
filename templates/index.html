@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="mb-4 text-center">CTF Challenges</h1>
+<div class="table-responsive">
+    <table class="table table-striped table-dark text-center" style="border-collapse: collapse;">
+        <thead>
+            <tr style="border-bottom: 1px solid #fff;">
+                <th style="width: 10%;">Title</th>
+                <th style="width: 20%;">Category</th>
+                <th style="width: 50%;">Description</th>
+                <th style="width: 20%;">Status</th>
+                <th style="width: 20%;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for challenge in challenges %}
+            <tr style="border-bottom: 1px solid #fff;">
+                <td style="word-wrap: break-word;text-align: center;">{{ challenge.title }}</td>
+		<td style="word-wrap: break-word;text-align: center;">{{ challenge.category }}</td>
+                <td style="word-wrap: break-word;text-align: left;">{{ challenge.description }}</td>
+                <td style="word-wrap: break-word;text-align: center;">
+                    {% if current_user.is_authenticated %}
+                        {% set submission = challenge.submissions | selectattr('user_id', 'equalto', current_user.id) | selectattr('is_correct', 'equalto', True) | first %}
+                        {% if submission %}
+                            <span class="badge bg-success">Solved</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Unsolved</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge bg-secondary">Unsolved</span>
+                    {% endif %}
+                </td>
+                <td style="word-wrap: break-word;text-align: center;">
+                    {% if current_user.is_authenticated %}
+                        {% set solved = challenge.submissions | selectattr('user_id', 'equalto', current_user.id) | selectattr('is_correct', 'equalto', True) | first %}
+                        {% if solved %}
+                            <!-- Toggle More Info Button -->
+                            <button class="btn btn-secondary btn-sm" onclick="toggleMoreInfo('more-info-{{ challenge.id }}')">Show More Info</button>
+                        {% else %}
+                            <a href="{{ url_for('challenge_detail', challenge_id=challenge.id) }}" class="btn btn-signup btn-sm">Attempt</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm">Login to Attempt</a>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr id="more-info-{{ challenge.id }}" class="collapse" style="display: {% if solved %} table-row {% else %} none {% endif %};border-bottom: 1px solid #fff;">
+                <td colspan="5">
+                    <div class="p-3 bg-dark text-white">
+                        <strong>More Information:</strong>
+                        <p>{{ challenge.answer_info }}</p> <!-- Change this to the field you want to display -->
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- JavaScript function to toggle more info visibility -->
+<script>
+    function toggleMoreInfo(id) {
+        const moreInfoRow = document.getElementById(id);
+        if (moreInfoRow.style.display === 'none' || moreInfoRow.style.display === '') {
+            moreInfoRow.style.display = 'table-row';
+        } else {
+            moreInfoRow.style.display = 'none';
+        }
+    }
+    window.onload = function() {
+        const rows = document.querySelectorAll('tr[id^="more-info-"]');
+        rows.forEach(row => {
+            row.style.display = 'none';
+        });
+    }
+</script>
+
+{% endblock %}

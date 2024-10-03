@@ -1,0 +1,61 @@
+/* General Styles */
+body {
+    background-color: #1f2228; /* Dark background color */
+    color: #ffffff; /* White text color */
+}
+
+/* Navbar Styles */
+.navbar {
+    background: linear-gradient(135deg, #2a2d34 0%, #1f2228 100%); /* Gradient background */
+    padding: 15px 30px; /* Padding around the navbar */
+}
+
+.navbar-brand {
+    color: #ffffff; /* White text color for brand */
+    font-size: 24px; /* Font size for the brand */
+}
+
+.nav-link {
+    color: #ffffff; /* White text color for links */
+    margin-right: 20px; /* Spacing between links */
+    text-transform: uppercase; /* Uppercase text */
+    transition: color 0.3s; /* Smooth color transition on hover */
+}
+
+.nav-link:hover {
+    color: #d0d0d0; /* Light grey color on hover */
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 30px; /* Rounded corners */
+    padding: 10px 20px; /* Padding inside buttons */
+    font-weight: bold; /* Bold text for buttons */
+}
+
+.btn-login {
+    background-color: #3e4c59; /* Dark button for Login */
+    color: white; /* White text for Login */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+.btn-login:hover {
+    background-color: #4a586b; /* Lighter shade on hover */
+}
+
+.btn-signup {
+    background-color: #6a5acd; /* Purple button for Sign Up */
+    color: white; /* White text for Sign Up */
+    margin-left: 10px; /* Space between buttons */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+.btn-signup:hover {
+    background-color: #5b4ecf; /* Darker shade on hover */
+}
+
+/* Alert Styles */
+.alert {
+    margin-bottom: 20px; /* Space below alerts */
+    border-radius: 8px; /* Rounded corners for alerts */
+}
