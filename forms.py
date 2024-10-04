@@ -7,7 +7,7 @@ from wtforms import (
     SubmitField,
     TextAreaField,
 )
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, EqualTo
 
 class RegisterForm(FlaskForm):
     username = StringField(
@@ -38,3 +38,10 @@ class ChallengeForm(FlaskForm):
 class SubmissionForm(FlaskForm):
     flag = StringField("Flag", validators=[DataRequired(), Length(max=100)])
     submit = SubmitField("Submit Flag")
+
+class ChangePasswordForm(FlaskForm):
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[
+        DataRequired(), EqualTo('new_password', message="Passwords must match.")
+    ])
+    submit = SubmitField('Change Password')
