@@ -38,6 +38,6 @@ def create_admin():
     .
 ```
 
-If you too change it after you lauched, delete ctf.db from folder "instance" (It'll get created when you launch the). Update the password and re-run. Note deleting ctf.db will delete all change and start as fresh instance.
+If you want to change it after you lauched the app, delete ctf.db from folder "instance" (It'll get created when you launch the). Update the password and re-run. Note deleting ctf.db will delete all change and start as fresh instance.
 
 ###########################
