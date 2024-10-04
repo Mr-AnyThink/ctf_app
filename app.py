@@ -11,7 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from db import db
 from models import User, Challenge, Submission
-from forms import LoginForm, RegisterForm, ChallengeForm, SubmissionForm
+from forms import LoginForm, RegisterForm, ChallengeForm, SubmissionForm, ChangePasswordForm
 #from routes import create_routes
 
 app = Flask(__name__)
@@ -104,6 +104,25 @@ def admin_dashboard():
         return redirect(url_for("index"))
     challenges = Challenge.query.all()
     return render_template("admin_dashboard.html", challenges=challenges)
+
+@app.route("/admin/change_password", methods=["GET", "POST"])
+@login_required
+def change_password():
+    if not current_user.is_admin:
+        flash("Access denied.", "danger")
+        return redirect(url_for("index"))
+
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        # Hash the new password and update it
+        hashed_password = generate_password_hash(form.new_password.data)
+        current_user.password = hashed_password
+        db.session.commit()
+        flash("Password updated successfully!", "success")
+        return redirect(url_for("admin_dashboard"))
+
+    return render_template("change_password.html", form=form)
+
 
 @app.route("/admin/create_challenge", methods=["GET", "POST"])
 @login_required
@@ -218,13 +237,13 @@ def flush_challenges():
 def submit_flag(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
     form = SubmissionForm()
-    
+
     if form.validate_on_submit():
         # Check if the user has already submitted a correct flag for this challenge
         existing_submission = Submission.query.filter_by(
             user_id=current_user.id, challenge_id=challenge_id, is_correct=True
         ).first()
-        
+
         if existing_submission:
             flash(
                 "You have already solved this challenge. Please wait for admin to unlock it.",
@@ -255,7 +274,7 @@ def submit_flag(challenge_id):
             is_correct=is_correct,
             timestamp=datetime.utcnow(),
         )
-        
+
         db.session.add(submission)
         db.session.commit()
 
