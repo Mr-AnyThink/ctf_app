@@ -20,7 +20,7 @@ pip3 install -r requirement.txt
 python3 app.py
 ```
 
-Admin Credential (Make sure change admin password.):
+You can access it as http://<ip_address>:5000. Admin Credential (Make sure change admin password.):
 ```
 username: admin
 username: Admin@123
