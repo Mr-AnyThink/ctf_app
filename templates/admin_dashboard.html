@@ -13,6 +13,8 @@
     <form method="POST" action="{{ url_for('flush_challenges') }}" style="display:inline;">
         <button type="submit" class="btn btn-danger">Flush All Challenges</button>
     </form>
+    <!-- Add button for changing password -->
+    <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('change_password') }}'">Change Admin Password</button>
 </div>
 
 <h3 class="mt-4">Existing Challenges</h3>
@@ -32,14 +34,14 @@
         <tr style="border-bottom: 1px solid #fff;">
             <td style="word-wrap: break-word;text-align: center;">{{ challenge.title }}</td>
             <td style="word-wrap: break-word;text-align: center;">{{ challenge.category }}</td>
-	    <td style="word-wrap: break-word;text-align: left;">{{ challenge.description }}</td>
-	    <td style="word-wrap: break-word;text-align: center;">{{ challenge.hint }}</td>
-	    <td style="word-wrap: break-word;text-align: left;">{{ challenge.answer_info }}</td>
+            <td style="word-wrap: break-word;text-align: left;">{{ challenge.description }}</td>
+            <td style="word-wrap: break-word;text-align: center;">{{ challenge.hint }}</td>
+            <td style="word-wrap: break-word;text-align: left;">{{ challenge.answer_info }}</td>
             <td style="word-wrap: break-word;text-align: center;">
                 <!-- Future Implementation: Edit/Delete functionality -->
                 <!-- <a href="#" class="btn btn-secondary btn-sm disabled">Edit</a> -->
-		<!-- <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('index') }}'">Back To Challenges</button> -->
-		<button class="btn btn-secondary" onclick="window.location.href='{{ url_for('edit_challenge', challenge_id=challenge.id) }}'">Edit</button>
+                <!-- <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('index') }}'">Back To Challenges</button> -->
+                <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('edit_challenge', challenge_id=challenge.id) }}'">Edit</button>
             </td>
         </tr>
         {% endfor %}
