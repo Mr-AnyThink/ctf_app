@@ -24,4 +24,20 @@ username: admin
 username: Admin@123
 ```
 
+To change admin password, find below code in app.py and modify "Admin@123", before running the app first time as it gets created when application get lanuched.
+
+```
+# Initialize the database
+@app.before_request
+def create_admin():
+    .
+    .
+            hashed_password = generate_password_hash('Admin@123')
+            new_admin = User(username='admin', password=hashed_password, is_admin=True)  # Include a password field
+    .
+    .
+```
+
+If you too change it after you lauched, delete ctf.db from folder "instance" (It'll get created when you launch the). Update the password and re-run. Note deleting ctf.db will delete all change and start as fresh instance.
+
 ###########################
