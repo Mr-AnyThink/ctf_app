@@ -35,7 +35,7 @@ Create a service to run at startup by following below -
  sudo nano /full_path_to_ctf/ctf_app/start_ctf.sh
 
  #!/bin/bash
- source ctf_env/ctf_env/bin/activate
+ source /home/ubuntu/ctf_env/ctf_env/bin/activate
  cd /full_path_to_ctf/ctf_app/
  python3 app.py
 ```
