@@ -29,7 +29,7 @@ username: Admin@123
 Create a service to run at startup by following below -
 
 ###########################
-1. Create script that execute required steps, make sure you are able to start server with script
+1. Create script that execute required steps
 
 ```
  sudo nano /full_path_to_ctf/ctf_app/start_ctf.sh
@@ -57,7 +57,6 @@ ExecStart=/full_path_to_ctf/ctf_app/start_ctf.sh
 WorkingDirectory=/full_path_to_ctf/ctf_app/
 Restart=always
 Environment="PATH=/usr/local/bin:/usr/bin:/bin"
-Environment="VIRTUAL_ENV=/home/ubuntu/ctf_env/ctf_env"  # Point to your virtual environment
 
 [Install]
 WantedBy=multi-user.target
