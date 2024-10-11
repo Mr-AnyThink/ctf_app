@@ -10,7 +10,7 @@ from flask_login import (
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from db import db
-from models import User, Challenge, Submission
+from models import User, Challenge, Submission, GlobalSettings
 from forms import LoginForm, RegisterForm, ChallengeForm, SubmissionForm, ChangePasswordForm
 #from routes import create_routes
 
@@ -29,6 +29,17 @@ login_manager.login_view = "login"
 
 with app.app_context():
     db.create_all()
+
+@app.before_request
+def initialize_global_settings():
+    with app.app_context():
+        settings = GlobalSettings.query.first()
+        if settings is None:
+            # If no settings exist, create a default one
+            new_settings = GlobalSettings(limit_submissions=False)
+            db.session.add(new_settings)
+            db.session.commit()
+
 
 # Initialize the database
 @app.before_request
@@ -102,8 +113,12 @@ def admin_dashboard():
     if not current_user.is_admin:
         flash("Access denied.", "danger")
         return redirect(url_for("index"))
+
     challenges = Challenge.query.all()
-    return render_template("admin_dashboard.html", challenges=challenges)
+    global_settings = GlobalSettings.query.first()  # Fetch the global settings
+
+    return render_template("admin_dashboard.html", challenges=challenges, global_settings=global_settings)
+
 
 @app.route("/admin/change_password", methods=["GET", "POST"])
 @login_required
@@ -122,6 +137,29 @@ def change_password():
         return redirect(url_for("admin_dashboard"))
 
     return render_template("change_password.html", form=form)
+
+@app.route("/admin/toggle_limit", methods=["POST"])
+@login_required
+def toggle_limit():
+    if not current_user.is_admin:
+        flash("Access denied.", "danger")
+        return redirect(url_for("index"))
+
+    settings = GlobalSettings.query.first()
+    if settings:
+        # Update the setting based on the checkbox value
+        settings.limit_submissions = 'limit_submissions' in request.form
+        db.session.commit()
+        flash("Global settings updated successfully.", "success")
+    else:
+        flash("Error: Global settings not found.", "danger")
+
+    # Reset all correct submissions to allow participants to re-submit
+    Submission.query.delete()
+    db.session.commit()
+
+    return redirect(url_for("admin_dashboard"))
+
 
 
 @app.route("/admin/create_challenge", methods=["GET", "POST"])
@@ -200,10 +238,13 @@ def unlock_all():
         flash("Access denied.", "danger")
         return redirect(url_for("index"))
     # Reset all correct submissions to allow participants to re-submit
-    correct_submissions = Submission.query.filter_by(is_correct=True).all()
-    for submission in correct_submissions:
-        submission.is_correct = False
+    Submission.query.delete()
     db.session.commit()
+    # Reset the global setting for submission limit to its default value (False)
+    global_settings = GlobalSettings.query.first()
+    if global_settings:
+        global_settings.limit_submissions = False  # Set the submission limit toggle to default (False)
+        db.session.commit()
     flash("All challenges have been unlocked for participants.", "success")
     return redirect(url_for("admin_dashboard"))
 
@@ -218,11 +259,16 @@ def flush_challenges():
     try:
         # First, delete all submissions (rankings)
         Submission.query.delete()
-
         # Then, delete all challenges
         Challenge.query.delete()
-
         db.session.commit()
+
+        # Reset the global setting for submission limit to its default value (False)
+        global_settings = GlobalSettings.query.first()
+        if global_settings:
+           global_settings.limit_submissions = False  # Set the submission limit toggle to default (False)
+           db.session.commit()
+
         flash("All challenges and rankings have been successfully flushed.", "success")
     except Exception as e:
         db.session.rollback()
@@ -237,6 +283,19 @@ def flush_challenges():
 def submit_flag(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
     form = SubmissionForm()
+
+    # Fetch global settings
+    global_settings = GlobalSettings.query.first()
+
+    if global_settings and global_settings.limit_submissions:
+        # Check how many wrong submissions the user has made for this challenge
+        wrong_attempts = Submission.query.filter_by(
+            user_id=current_user.id, challenge_id=challenge_id, is_correct=False
+        ).count()
+
+        if wrong_attempts >= 5:
+            flash("You have reached the maximum number of incorrect submissions for this challenge.", "danger")
+            return redirect(url_for("challenge_detail", challenge_id=challenge_id))
 
     if form.validate_on_submit():
         # Check if the user has already submitted a correct flag for this challenge
@@ -307,4 +366,4 @@ def challenge_detail(challenge_id):
 
 if __name__ == "__main__":
     #app.run(debug=True)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=7000, debug=True)
