@@ -63,8 +63,11 @@ def load_user(user_id):
 @app.route("/")
 @login_required
 def index():
+    # Retrieve the toggle limit from GlobalSettings
+    settings = GlobalSettings.query.first()
+    toggle_limit = settings.limit_submissions if settings else False
     challenges = Challenge.query.all()
-    return render_template("index.html", challenges=challenges)
+    return render_template("index.html", challenges=challenges, toggle_limit=toggle_limit) # pass details to HTML
 
 
 @app.route("/register", methods=["GET", "POST"])
