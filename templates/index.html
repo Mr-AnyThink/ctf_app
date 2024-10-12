@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <h1 class="mb-4 text-center">CTF Challenges</h1>
+
+{% if toggle_limit %}
+    <p style="color:red;">Limit on wrong submissions is active. You have only 5 attempts for each challenge. <br/>If you exceed the 5 attempts, no more responses will be re>
+{% else %}
+    <p style="color:red;">No limit on wrong submissions.</p>
+{% endif %}
+
 <div class="table-responsive">
     <table class="table table-striped table-dark text-center" style="border-collapse: collapse;">
         <thead>
