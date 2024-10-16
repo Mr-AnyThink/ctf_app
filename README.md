@@ -57,6 +57,7 @@ ExecStart=/full_path_to_ctf/ctf_app/start_ctf.sh
 WorkingDirectory=/full_path_to_ctf/ctf_app/
 Restart=always
 Environment="PATH=/usr/local/bin:/usr/bin:/bin"
+Environment="VIRTUAL_ENV=/full_path_to_virtual_env/"  # Point to your virtual environment
 
 [Install]
 WantedBy=multi-user.target
